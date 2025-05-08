@@ -13,3 +13,8 @@ Projects will be graded on function (correct results, design according to the sp
 
 
 - here we can add later the division of labour and maybe also a sort of checklist of what we need to do by steps to complete the assignment
+
+
+#TODO 
+- create your own branch for coding under the main thingy
+  
