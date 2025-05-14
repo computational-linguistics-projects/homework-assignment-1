@@ -1,13 +1,13 @@
 """This file defines the class CorpusReader. It provides an initializer that accepts any directory path name for the corpus it will read.
 It has the method sents() that returns the text of the corpus as a list of tokenized sentences, i.e., the corpus becomes a list of lists of tokens."""
-
+#TODO comment everything sentence by sentence and make it not into a jupyter notebook
 #%%
 import os
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
-#TODO take this out
+#TODO take this out after having importe it once
 #import nltk
-# nltk.download('all')
+#nltk.download('all')
 
 #Defining the class CorupusReader
 class CorpusReader:
@@ -38,15 +38,15 @@ class CorpusReader:
                     for sentence in sentences:
                         words=word_tokenize(sentence,language='english')
                         listoftokens.append(words)
-        return listoftokens
+                return listoftokens
                     
         
 
 
-
+#TODO take this away when we did our tests
 corpus = CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
 sentences = corpus.sents()  # a list of lists of tokens
-print(sentences)
+#print(sentences)
 
 
 # %%
