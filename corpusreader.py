@@ -5,7 +5,6 @@ It has the method sents() that returns the text of the corpus as a list of token
 
 import os
 import nltk
-import re
 
 #Defining the class CorupusReader
 class CorpusReader:
@@ -22,24 +21,27 @@ class CorpusReader:
         """Read the contents of a directory of files, and return the results as
         either a list of lines or a list of words.
         """   
+        #creates an empty list which sentences of tokens will be appended to
+        listoftokens=[]
         #loops over the files in directory
         for filename in os.listdir(self.directory):
             #if file in directory is a text file
-            if filename[-4:]==r"\.txt":
+            if filename.endswith('.txt'):
             #opens each file and reads it
                 with open(self.directory+'/'+filename) as connection:
-                    text=connection.readlines()
+                    text=connection.read()
                     #creates list of sentences
                     sentences=nltk.tokenize.sent_tokenize(text,language='english')
-                    #creates list of lists words
-                    words=nltk.tokenize.word_tokenize(sentences,language='english')
-                    return text
+                    for sentence in sentences:
+                        words=nltk.tokenize.word_tokenize(sentence,language='english')
+                        listoftokens.append(words)
+        return listoftokens
                     
         
 
 
 
-corpus = CorpusReader("path")
+corpus = CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
 sentences = corpus.sents()  # a list of lists of tokens
 print(sentences)
 
