@@ -2,9 +2,12 @@
 It has the method sents() that returns the text of the corpus as a list of tokenized sentences, i.e., the corpus becomes a list of lists of tokens."""
 
 #%%
-
 import os
-import nltk
+from nltk.tokenize import word_tokenize
+from nltk.tokenize import sent_tokenize
+#TODO take this out
+#import nltk
+# nltk.download('all')
 
 #Defining the class CorupusReader
 class CorpusReader:
@@ -31,9 +34,9 @@ class CorpusReader:
                 with open(self.directory+'/'+filename) as connection:
                     text=connection.read()
                     #creates list of sentences
-                    sentences=nltk.tokenize.sent_tokenize(text,language='english')
+                    sentences=sent_tokenize(text,language='english')
                     for sentence in sentences:
-                        words=nltk.tokenize.word_tokenize(sentence,language='english')
+                        words=word_tokenize(sentence,language='english')
                         listoftokens.append(words)
         return listoftokens
                     
