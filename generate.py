@@ -16,10 +16,10 @@ class NgramModel:
         self.tokenizedsentences=tokenizedsentences
         self.ngramcount=ngramcount
         #creates a copy of the tokenized list to avoid change of original data
-        self.cleansentences= self.cleaningdata()     
+        self.cleandata= self.cleaningdata()     
         #calling the function from within the initializer, to keep cleaner code
         self.frequency=self.frequencytables()
-        
+        #self.probability=self.probability(self.frequency)
         
     def cleaningdata(self):
         copyoftokenizedsentences=self.tokenizedsentences.copy()
@@ -41,7 +41,7 @@ class NgramModel:
         
     def frequencytables(self):
         ngramlist=[]
-        for sentence in self.cleansentences:
+        for sentence in self.cleandata:
             x=0
             y=self.ngramcount
             while y<len(sentence)-1:
@@ -62,7 +62,7 @@ class NgramModel:
         #sum of ngrams that share the same prefix
         sumofprefix=0
         currentdictionary=self.frequency
-        try:
+        if ngram in currentdictionary.keys():
             for key in currentdictionary.keys():
                 if key[0]==ngram[0]:
                     sumofprefixcounts+=currentdictionary[ngram]
@@ -73,10 +73,38 @@ class NgramModel:
             else:
                 ksmoothedprobability= (self.frequency[ngram]+smoothing_constant)/((sumofprefixcounts+smoothing_constant)*sumofprefix)
                 return ksmoothedprobability
-        except:
-            print(0.0)
+        else:
+            return (0.0)
         
-    # def preplexity(self,sentence, smoothing_constant=1.0):
+    def perplexity(self,sentence, smoothing_constant=1.0):
+        cleansentence=[]
+        #no multiply fpr zero must 1
+        perplexity=1
+        for word in sentence:
+            if re.match('\W+',word):
+                sentence.remove(word)    
+        #converts all to lowercase
+        sentence = [word.lower() for word in sentence]
+        #adds 1 sentence-end token (</s>) at the end of each sentence
+        sentence.append('</s>')
+         #adds n-1 sentence-start tokens (<s>) at the beginning of each sentence,
+        sentence.insert(0,'<s>')
+        #sum of the counts of each ngram that share the same prefix
+        sumofprefixcounts=0
+        #sum of ngrams that share the same prefix
+        sumofprefix=0
+        currentdictionary=self.frequency
+    
+        for cleanword in sentence:
+            for key in currentdictionary.keys():
+                if key[0]==cleanword:
+                    sumofprefixcounts+=currentdictionary[cleanword]
+                    sumofprefix+=1
+            ksmoothedprobability= (self.frequency[cleanword]+smoothing_constant)/((sumofprefixcounts+smoothing_constant)*sumofprefix)
+            perplexity=perplexity*ksmoothedprobability
+        return perplexity
+        
+        
         
     # def choose_successor(self, prefix)
           
@@ -90,7 +118,7 @@ class NgramModel:
        
 corpus = CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
 sentences = corpus.sents()  # a list of lists of tokens
-test=NgramModel(sentences,3)
-print(test.probability(('the','bl','and')))
+test=NgramModel(sentences,2)
+print(test.perplexity(['The','Ball','Gives','a','happy','.']))
 
 # %%
