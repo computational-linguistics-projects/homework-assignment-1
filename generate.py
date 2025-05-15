@@ -16,7 +16,13 @@ class NgramModel:
         self.tokenizedsentences=tokenizedsentences
         self.gramnumber=gramnumber
         #creates a copy of the tokenized list to avoid change of original data
-        copyoftokenizedsentences=tokenizedsentences.copy()
+        self.cleansentences= self.cleaningdata()     
+        #calling the function from within the initializer, to keep cleaner code
+        self.frequency=self.frequencytables()
+        
+        
+    def cleaningdata(self):
+        copyoftokenizedsentences=self.tokenizedsentences.copy()
         newsentences=[]
         for sentence in copyoftokenizedsentences:
             for  word in sentence:
@@ -30,13 +36,12 @@ class NgramModel:
              #adds n-1 sentence-start tokens (<s>) at the beginning of each sentence,
             sentence.insert(0,'<s>')
             newsentences.append(sentence)
-            #store the frequency tables in a variable inside the class.
-        self.sentences= newsentences     
-        self.frequency=self.frequencytables()
+        return newsentences     
+        
         
     def frequencytables(self):
         ngramlist=[]
-        for sentence in self.sentences:
+        for sentence in self.cleansentences:
             x=0
             y=self.gramnumber
             while y<len(sentence)-1:
@@ -61,3 +66,5 @@ corpus = CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computat
 sentences = corpus.sents()  # a list of lists of tokens
 test=NgramModel(sentences,2)
 print(test.frequencytables())
+
+# %%
