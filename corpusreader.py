@@ -46,7 +46,7 @@ class CorpusReader:
 #TODO take this away when we did our tests
 corpus = CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
 sentences = corpus.sents()  # a list of lists of tokens
-#print(sentences)
+print(sentences)
 
 
 # %%
