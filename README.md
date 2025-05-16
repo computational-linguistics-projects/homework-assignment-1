@@ -16,7 +16,9 @@ Projects will be graded on function (correct results, design according to the sp
 
 
 #TODO 
+main
 - create your own branch for coding under the main thingy
+
   
 ASSIGNMENT TEXT:
 
@@ -237,3 +239,6 @@ method perplexity
 Please don’t include any corpora in your submission.
 
 Note: If your modules throw errors when imported, you will be penalized for that, in addition to the mistakes that led to the errors. If you can’t solve those problems before handing it in, you may comment bad parts out, and provide a file called README.txt or README.md in which you direct our attention to those parts so we can see how close you got to making it work. Use line numbers.
+
+- create your own branch for coding under the main thing
+mar's-code
