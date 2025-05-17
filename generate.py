@@ -6,6 +6,7 @@ which returns the n-gram probability of the item we pass it, given the corpus; t
 of a given sentence; and the method choose successor, which probabilistically chooses a successor using the model. """
 
 #TODO comment pretty and take away examples and jupyter notebook markings CLEAN ALL
+#TODO handle errors in corpus reader if you give i a path that does not exist
 #%%
 
 
@@ -173,11 +174,24 @@ class NgramModel:
         
             return perplexity
 
+
+    def choose_successor(self, prefix):
+        lastngramprefixindex=self.ngramcount-1
+        successorprefix=prefix[-lastngramprefixindex:]
+        successorprefix=tuple(successorprefix)
+        currentdictionary=self.frequency
+        possiblesuccessors=[]
+        for key in currentdictionary.keys():
+            if successorprefix==key[:-1]:
+                possiblesuccessors.append(key[-1])
+        successorchoice=random.choices(possiblesuccessors,k=1)    
+        if successorchoice is not None:
+            return successorchoice
+        else:
+            return None
+        
     
         
-        
-        
-    # def choose_successor(self, prefix)
           
 
 
@@ -187,19 +201,26 @@ class NgramModel:
        
        
        
-corpus = CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
-sentences = corpus.sents()  # a list of lists of tokens
+       
+       
+       
+       
+       
+testcorpus= CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
+sentences = testcorpus.sents()  # a list of lists of tokens
 test=NgramModel(sentences,2)    
-    # print(test.probability(('the','ball')))
-    # print(test.frequency)
+# print(test.probability(('the','ball')))
+# print(test.frequency)
 
 
 
-print(test.perplexity(['the','ball']))
-print(test.perplexity(['and','the']))
-print(test.perplexity(['ccccc','ball']))
+# print(test.perplexity(['the','ball']))
+# print(test.perplexity(['and','the']))
+# print(test.perplexity(['ccccc','ball']))
 
 
 #print(test.unigram())
+
+print(test.choose_successor(['the','ball','and']))
 
 # %%
