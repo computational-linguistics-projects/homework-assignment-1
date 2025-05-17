@@ -15,7 +15,6 @@ class CorpusReader:
         Takes the directory path name of the corpus that will be read."""
         self.directory=directory
           
-          
     def sents(self):
         """ Reads the contents of a directory of files.
             returns: list of sentences which are themselves lists of their words"""   
