@@ -5,7 +5,7 @@ needed by the methods listed below. Store the frequency tables in a variable ins
 which returns the n-gram probability of the item we pass it, given the corpus; the method sentence perplexity, which returns the perplexity
 of a given sentence; and the method choose successor, which probabilistically chooses a successor using the model. """
 
-#TODO comment pretty and take away examples and jupyter notebook markings
+#TODO comment pretty and take away examples and jupyter notebook markings CLEAN ALL
 #%%
 
 
@@ -23,7 +23,7 @@ class NgramModel:
         #Calling the later methods from within the initializer, to keep code more organized
         self.formatting= self.formatteddata()     
         self.frequency=self.frequencytables()
-        
+        self.unigram=self.unigram()
         
     def formatteddata(self):
         """Removes punctuation from the words within the sentences, makes them into lowercase, adds begginign and end of sentence markers."""
@@ -50,7 +50,7 @@ class NgramModel:
         
         
     def frequencytables(self):
-        """Pre-calculates and stores the frequency tables needed for the later defined methods.
+        """Pre-calculates and stores the frequency tables needed for the later defined methods. Takes a number, the ngram count.
         Returns: dictionary with the n-grams divided as per the number given in self.ngramcount, and respective counts of occurences
         in the corpus."""
         #Initializes list where n-grams will be appended to
@@ -62,7 +62,7 @@ class NgramModel:
             y=self.ngramcount
             #While the y value is shorter than the last indexed item of the sentence, it creates all the possible n-grams 
             #by adding 1 to each coordinate of the index slice, and appends them to the n-gram list
-            while y<len(sentence)-1:
+            while y<len(sentence):
                 ngramlist.append(tuple(sentence[x:y]))
                 x+=1
                 y+=1
@@ -77,8 +77,20 @@ class NgramModel:
             else:
                 frequencytable[ngram]=1   
         #Returns the frequency dictionary     
-        return frequencytable             
-    
+        return frequencytable    
+            
+            
+    def unigram(self):
+        unigrams={}
+        for sentence in self.formatting:
+            for token in sentence:
+                if token in unigrams:
+                    unigrams[tuple(token)]+=1
+                    
+                else:   
+                    unigrams[tuple(token)]=1
+        return unigrams       
+            
     
     def probability(self,ngram,smoothing_constant=0.0):
         """Returns the probability of a given n-gram considering the whole corpus. If not specified, assumes a smoothing_constant of 0.0"""
@@ -86,56 +98,81 @@ class NgramModel:
         sumofprefix=0
         #Sum of all of the counts of each individual ngram that share the same prefix
         sumofprefixcounts=0
+        #Counter for all unique words in the corpus
         #Calls the frequency dictionary that was previously created from the corpus
         currentdictionary=self.frequency
-        #If the ngram is present in the dictionary
+        #Gets the counts
         if ngram in currentdictionary.keys():
             #Loops over the keys
             for key in currentdictionary.keys():
-                #If the prefix of the key matches the one of the ngram that was given, adds the counts of that ngram to the counter of all occurences of that prefix
-                if key[0]==ngram[0]:
-                    sumofprefixcounts+=currentdictionary[ngram]
+                #The prefix is composed of all tokens except the last. If the prefix of the key matches the one of the ngram that was given, adds the counts of that ngram to the counter of all occurences of that prefix
+                if ngram[:-1]==key[:-1]:
+                    sumofprefixcounts+=currentdictionary[key]
                     sumofprefix+=1
             #If the smoothing constant is not specified, it uses the default value and calculates the raw probability
             if smoothing_constant==0.0:
-                rawprobability= self.frequency[ngram]/sumofprefixcounts
+                rawprobability= self.frequency[key]/sumofprefixcounts
                 return rawprobability
             # If the smoothing constant is specified, it uses that value and calculates the k-smoothed probability, which also uses the individual uses of the prefix
             else:
-                ksmoothedprobability= (self.frequency[ngram]+smoothing_constant)/((sumofprefixcounts+smoothing_constant)*sumofprefix)
+                ksmoothedprobability= (self.frequency[key]+smoothing_constant)/((sumofprefixcounts+smoothing_constant)*len(self.unigram))
                 return ksmoothedprobability
         #If the ngram is not found in the corpus, it returns probability 0.0
-        else:
-            return (0.0)
+        else:   
+            return smoothing_constant
         
 # TODO fix and comment perplexity also to understand the issues better. test each section
     def perplexity(self,sentence, smoothing_constant=1.0):
-        cleansentence=[]
-        #no multiply fpr zero must 1
-        
-        for word in sentence:
+        """Given a sentence in the form of a list of tokens, formats it the same way that formatteddata() does,
+        removing punctuation-only tokens, changing it to lowercase, and surrounding with <s> and </s>). 
+        It calculates and returns the sentence's perplexity using the add-k-smoothed probability model. If unknown
+        words are seen, returns infinite."""
+        #Loops over each word in the given sentence and removes punctuation
+        copyofsentence=sentence.copy()
+        for word in copyofsentence:
             if re.match('\W+',word):
-                sentence.remove(word)    
-        #converts all to lowercase
-        sentence = [word.lower() for word in sentence]
-        #adds 1 sentence-end token (</s>) at the end of each sentence
-        sentence.append('</s>')
-         #adds n-1 sentence-start tokens (<s>) at the beginning of each sentence,
-        sentence.insert(0,'<s>')
-        #sum of the counts of each ngram that share the same prefix
-        counter=0
+                copyofsentence.remove(word)    
+        #Converts all words to lowercase
+        copyofsentence = [word.lower() for word in copyofsentence]
+        #Adds a sentence-end token (</s>) at the end of the sentence
+        copyofsentence.append('</s>')
+        #Adds a sentence-start token (<s>) at the beginning of the sentence
+        copyofsentence.insert(0,'<s>')
+        #Initiating perplexity variable as 1, given that it will be multiplied instead of summed
         perplexity=1
-        for cleanword in sentence:
-            counter+=1
-            probability=self.probability(word,smoothing_constant)
-            perplexity=1/probability
-        perplexity**counter
-        #print(perplexity)
-        #try:
-            # perplexity=1/(perplexity*getvalue)
-            # return perplexity
-        # except:
-        #     return float("inf")
+        
+        currentdictionary=self.frequency
+        #Creates the first n-gram depending on the ngramcount that was specified
+        ngramlist=[]
+        x=0
+        y=self.ngramcount
+        #While the y value is shorter than the last indexed item of the sentence, it creates all the possible n-grams 
+        #by adding 1 to each coordinate of the index slice, and appends them to the n-gram list
+        while y<len(copyofsentence):
+            ngramlist.append(tuple(copyofsentence[x:y]))
+            x+=1
+            y+=1
+         
+        for token in copyofsentence:
+            token=tuple(token)
+            if token not in self.unigram:
+                return float('inf')
+        else:
+            for ngram in ngramlist:
+                #Calculates the probability of each token, looking through the unigram dictionary, and passing it the default 
+                # value of this method as the smoothing constant (1.0; LaPlace smoothing)
+                #if ngram in currentdictionary:
+                ngramprobability=self.probability(ngram,smoothing_constant)
+                perplexity=perplexity*ngramprobability
+                    
+            perplexity=perplexity**-(1/(len(ngramlist)))
+                 
+            #Starts to calculate perplexity by multiplying the token's probability one by one
+        #After the probabilities have been multiplied, finishes the perplexity calculation by raising it to the power of -1/counter
+        #also remves the one from the count of n bc we have begginign and end markers
+        
+            return perplexity
+
     
         
         
@@ -152,8 +189,17 @@ class NgramModel:
        
 corpus = CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
 sentences = corpus.sents()  # a list of lists of tokens
-test=NgramModel(sentences,2)
-#print(test.perplexity(['The','Ball','and','.']))
-print(test.probability('The','Ball'))
+test=NgramModel(sentences,2)    
+    # print(test.probability(('the','ball')))
+    # print(test.frequency)
+
+
+
+print(test.perplexity(['the','ball']))
+print(test.perplexity(['and','the']))
+print(test.perplexity(['ccccc','ball']))
+
+
+#print(test.unigram())
 
 # %%
