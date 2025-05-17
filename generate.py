@@ -62,7 +62,7 @@ class NgramModel:
             y=self.ngramcount
             #While the y value is shorter than the last indexed item of the sentence, it creates all the possible n-grams 
             #by adding 1 to each coordinate of the index slice, and appends them to the n-gram list
-            while y<len(sentence)-1:
+            while y<len(sentence):
                 ngramlist.append(tuple(sentence[x:y]))
                 x+=1
                 y+=1
@@ -85,10 +85,10 @@ class NgramModel:
         for sentence in self.formatting:
             for token in sentence:
                 if token in unigrams:
-                    unigrams[token]+=1
+                    unigrams[tuple(token)]+=1
                     
                 else:   
-                    unigrams[token]=1
+                    unigrams[tuple(token)]=1
         return unigrams       
             
     
@@ -127,33 +127,51 @@ class NgramModel:
         removing punctuation-only tokens, changing it to lowercase, and surrounding with <s> and </s>). 
         It calculates and returns the sentence's perplexity using the add-k-smoothed probability model. If unknown
         words are seen, returns infinite."""
-        #Intiates a list for the formatted sentence to be appended to
-        cleansentence=[]
         #Loops over each word in the given sentence and removes punctuation
-        for word in sentence:
+        copyofsentence=sentence.copy()
+        for word in copyofsentence:
             if re.match('\W+',word):
-                sentence.remove(word)    
+                copyofsentence.remove(word)    
         #Converts all words to lowercase
-        sentence = [word.lower() for word in sentence]
+        copyofsentence = [word.lower() for word in copyofsentence]
         #Adds a sentence-end token (</s>) at the end of the sentence
-        sentence.append('</s>')
+        copyofsentence.append('</s>')
         #Adds a sentence-start token (<s>) at the beginning of the sentence
-        sentence.insert(0,'<s>')
+        copyofsentence.insert(0,'<s>')
         #Initiating perplexity variable as 1, given that it will be multiplied instead of summed
         perplexity=1
-        #Loops over each token in the formatted sentence
-        for token in sentence:
-            #Calculates the probability of each token, looking through the unigram dictionary, and passing it the default 
-            # value of this method as the smoothing constant (1.0; LaPlace smoothing)
-            if token in self.unigram.keys():
-                tokenprobability=self.probability(token,smoothing_constant)
-                perplexity=perplexity*tokenprobability
-            else: 
-                return float('inf') 
+        
+        currentdictionary=self.frequency
+        #Creates the first n-gram depending on the ngramcount that was specified
+        ngramlist=[]
+        x=0
+        y=self.ngramcount
+        #While the y value is shorter than the last indexed item of the sentence, it creates all the possible n-grams 
+        #by adding 1 to each coordinate of the index slice, and appends them to the n-gram list
+        while y<len(copyofsentence):
+            ngramlist.append(tuple(copyofsentence[x:y]))
+            x+=1
+            y+=1
+         
+        for token in copyofsentence:
+            token=tuple(token)
+            if token not in self.unigram:
+                return float('inf')
+        else:
+            for ngram in ngramlist:
+                #Calculates the probability of each token, looking through the unigram dictionary, and passing it the default 
+                # value of this method as the smoothing constant (1.0; LaPlace smoothing)
+                #if ngram in currentdictionary:
+                ngramprobability=self.probability(ngram,smoothing_constant)
+                perplexity=perplexity*ngramprobability
+                    
+            perplexity=perplexity**-(1/(len(ngramlist)))
+                 
             #Starts to calculate perplexity by multiplying the token's probability one by one
         #After the probabilities have been multiplied, finishes the perplexity calculation by raising it to the power of -1/counter
-        perplexity=perplexity**-(1/len(self.unigram.keys()))
-        return perplexity
+        #also remves the one from the count of n bc we have begginign and end markers
+        
+            return perplexity
 
     
         
@@ -172,11 +190,15 @@ class NgramModel:
 corpus = CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
 sentences = corpus.sents()  # a list of lists of tokens
 test=NgramModel(sentences,2)    
-print(test.probability(('the','ball')))
-print(test.frequency)
+    # print(test.probability(('the','ball')))
+    # print(test.frequency)
 
 
-print(test.perplexity(['The','Ball','and','.']))
+
+print(test.perplexity(['the','ball']))
+print(test.perplexity(['and','the']))
+print(test.perplexity(['ccccc','ball']))
+
 
 #print(test.unigram())
 
