@@ -85,11 +85,12 @@ class NgramModel:
         unigrams={}
         for sentence in self.formatting:
             for token in sentence:
+                token=tuple([token])
                 if token in unigrams:
-                    unigrams[tuple(token)]+=1
+                    unigrams[token]+=1
                     
                 else:   
-                    unigrams[tuple(token)]=1
+                    unigrams[token]=1
         return unigrams       
             
     
@@ -112,11 +113,11 @@ class NgramModel:
                     sumofprefix+=1
             #If the smoothing constant is not specified, it uses the default value and calculates the raw probability
             if smoothing_constant==0.0:
-                rawprobability= self.frequency[key]/sumofprefixcounts
+                rawprobability= self.frequency[ngram]/sumofprefixcounts
                 return rawprobability
             # If the smoothing constant is specified, it uses that value and calculates the k-smoothed probability, which also uses the individual uses of the prefix
             else:
-                ksmoothedprobability= (self.frequency[key]+smoothing_constant)/((sumofprefixcounts+smoothing_constant)*len(self.unigram))
+                ksmoothedprobability= (self.frequency[ngram]+smoothing_constant)/((sumofprefixcounts+smoothing_constant)*len(self.unigram))
                 return ksmoothedprobability
         #If the ngram is not found in the corpus, it returns probability 0.0
         else:   
@@ -155,7 +156,7 @@ class NgramModel:
             y+=1
          
         for token in copyofsentence:
-            token=tuple(token)
+            token=tuple([token])
             if token not in self.unigram:
                 return float('inf')
         else:
@@ -184,11 +185,15 @@ class NgramModel:
         for key in currentdictionary.keys():
             if successorprefix==key[:-1]:
                 possiblesuccessors.append(key[-1])
-        successorchoice=random.choices(possiblesuccessors,k=1)    
+        successorchoice=random.choices(possiblesuccessors)    
         if successorchoice is not None:
             return successorchoice
         else:
-            return None
+            for word in prefix:
+                if word in self.unigrams():
+                    random.choices(self.unigrams.keys())
+                else:
+                    return None
         
     
         
@@ -209,14 +214,14 @@ class NgramModel:
 testcorpus= CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
 sentences = testcorpus.sents()  # a list of lists of tokens
 test=NgramModel(sentences,2)    
-# print(test.probability(('the','ball')))
-# print(test.frequency)
+print(test.probability(('the','ball')))
+print(test.frequency)
 
 
 
-# print(test.perplexity(['the','ball']))
-# print(test.perplexity(['and','the']))
-# print(test.perplexity(['ccccc','ball']))
+print(test.perplexity(['the','ball']))
+print(test.perplexity(['and','the']))
+print(test.perplexity(['ccccc','ball']))
 
 
 #print(test.unigram())
