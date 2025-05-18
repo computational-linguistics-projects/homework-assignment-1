@@ -33,6 +33,7 @@ def generate_sentence(ngram_model):
 
 if __name__=="__main__":
     #1
+    #TODO take our path
     corpus= CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
     sentences = corpus.sents() 
     model1=NgramModel(sentences,2) 
