@@ -4,22 +4,22 @@ Problems encounterd in our code:
 
 Model.py 
  
-We have a feeling that our perpelexity calculations might not be accurate (lines 127 - 176). If the problem is with our code then it refers back to our calcualtions 
-either in the perpelexity function or our probability function(lines ). But if not it might be the size of the coprus that is skewing the calcuations.
+We have a feeling that our perpelexity calculations might not be accurate (lines 131 - 176). If the problem is with our code then it refers back to our calcualtions 
+either in the perpelexity function or our probability function(lines 102-128 ). But if not it might be the size of the coprus that is skewing the calcuations.
 
-There is also another problem with the choose_successor function (lines 179 - 201) where the code will choose a successor 
+There is also another problem with the choose_successor function (lines 179 - 207) where the code will choose a successor 
 however it does this at random and not based on a any probability calculations. We tried to fix this by using the 'weights' variable 
 in the python method random.choices() and assigning the weight i.e. probability of being chosen at random as the the value of the 
-corresponding bigram key in the n-gram dictionary (see lines 185 -193). However, this did not work and it returned an error 
+corresponding bigram key in the n-gram dictionary (see lines 197-200, 208). However, this did not work and it returned an error 
 saying the the length of the lists did not match. As we did not have anymore time to troubleshoot this, we decided to leave it out. 
 But we are aware that the choose_successor function is not accurate without taking into account the probability of the choice. 
 
 Generate.py 
 
 
-We could not get this function to work. Conceptually we understood the problem, which is in part related to not having been able to include the weights
+We could not get this function to work (lines 15 -38). Conceptually we understood the problem, which is in part related to not having been able to include the weights
 in our selecting function, and therefore our generation loop having a hard time reaching a end symbol to end the sentence generation.
-However, we decided to create a non probabilistic version that still has some variability,as it chooses a lenght from one to twenty at random, as we wanted to
+However, we decided to create a non probabilistic version that still has some variability (line 24 and 26),as it chooses a length from one to twenty at random, as we wanted to
 show that we were able to conceptually solve the executable section of the file. 
 
 
