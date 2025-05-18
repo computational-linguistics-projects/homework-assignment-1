@@ -11,7 +11,7 @@ of a given sentence; and the method choose successor, which probabilistically ch
 
 
 
-
+import nltk
 from corpusreader import CorpusReader
 from model import NgramModel
 
@@ -28,22 +28,22 @@ def generate_sentence(model):
     return ' '.join(prefix[(model.n-1):])
 
 if __name__ == '__main__':
- e
+
 
     
     # Create model
     model = NgramModel("C:/Users/Adrian/OneDrive/Desktop/comput ling/small-corpus", 2)
     
     # Generate samples
-    print("Generated sentences:")
-    for _ in range(2):
-        print(generate_sentence(model))
+print("Generated sentences:")
+for _ in range(2):
+    print(generate_sentence(model))
     
     # Test perplexity
     test_cases = [
-        "this is a test",
-        "unknown words here",
-        "ngram models useful"
+        "where the Norweyan",
+        "so well thy words smack",
+        "for for for"
     ]
     
     print("\nPerplexity tests:")
@@ -53,10 +53,14 @@ if __name__ == '__main__':
         print(f"'{text}': {pp}")
 
 # Initialize CorpusReader
-#corpus_reader = CorpusReader("C:/Users/Adrian/OneDrive/Desktop/comput ling/small-corpus")
-#test_sentences = corpus_reader.sents()
+corpus_reader = CorpusReader("C:/Users/Adrian/OneDrive/Desktop/comput ling/small-corpus")
+test_sentences = corpus_reader.sents()
 
 corpus_path = r'C:/Users/Adrian/OneDrive/Documents/GitHub/homework-assignment-1/corpus'
 print(f"Initializing CorpusReader with path: {corpus_path}")
 corpus = CorpusReader(corpus_path)
 
+from model import NgramModel
+model = NgramModel(sentences, 2)
+testngram = tuple(['so','well'])
+model.probability(ngram = testngram, k =1)

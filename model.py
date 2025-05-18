@@ -3,6 +3,9 @@ the regular modeule section and a executable protected test section."""
 
 import re
 import random
+import corpusreader
+import generate
+
 
 class NgramModel:
     def __init__(self, sentences, n):
@@ -75,3 +78,4 @@ class NgramModel:
                 candidates.append(ngram[-1])
                 weights.append(count)
         return random.choices(candidates, weights=weights)[0] if candidates else None
+    
