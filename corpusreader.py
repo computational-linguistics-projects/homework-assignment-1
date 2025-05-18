@@ -38,3 +38,9 @@ class CorpusReader:
                 #Returns the final list
                 return listoftokens
                     
+
+corpus_path= "C:/Users/maril/Downloads/train/train"
+corpus = CorpusReader(corpus_path)
+
+sentences = corpus.sents()
+print(sentences)
