@@ -1,5 +1,6 @@
 """This file defines the class CorpusReader. It provides an initializer that accepts any directory path name for the corpus it will read.
-It has the method sents() that returns the text of the corpus as a list of tokenized sentences, i.e., the corpus becomes a list of lists of tokens."""
+It has the method sents() that returns the text of the corpus as a list of tokenized sentences, i.e., the corpus becomes a list of lists of tokens.
+authors: Rita Ruano, Adrian Wojcik, Marilea Canul"""
 
 #Importing necessary modules and methods from said modules 
 import os
@@ -9,9 +10,9 @@ from nltk.tokenize import sent_tokenize
 #Defining the class CorupusReader
 class CorpusReader:
     #Initializing 
-    def __init__(self,directory):
+    def __init__(self,directory='./train'):
         """ Initializes a CorpusReader object.
-        Takes the directory path name of the corpus that will be read."""
+        Takes the directory path name of the corpus that will be read. Having the default of train corpus within the same directory"""
         self.directory=directory
           
     def sents(self):
