@@ -1,9 +1,11 @@
 """"This file contains the main module of the system. It imports the previous modules and consists of two senctions: 
 the regular modeule section and a executable protected test section.
+Since our version of choose succesor does not yet include weights, we had to choose a way to end the sentences 
+non-probabilistically, as otherwise the loop would take too long to finish or be infinite. This way the rest of
+the code can still run even tough it is not behaving fully as desired.
 authors: Rita Ruano, Adrian Wojcik, Marilea Canul"""
 
-#%%
-
+#Importing necessary modules and methods from said modules 
 from corpusreader import CorpusReader
 from model import NgramModel
 import re
@@ -16,29 +18,36 @@ def generate_sentence(ngram_model):
     the instantiated model into account."""
     #Initiates a sentence with a start symbol 
     sentence = ['<s>']
-    #While the follo
+    #Initiates the counter that will stop the loop
     counter=0
+    #Creates a list of numbers to choose a lenght from untill 20
     listofnumbers=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    #Randomly selects a lenght from the list, as it returns a list, it selects an indexed item to use it as an integer later
     sentencelength=random.choices(listofnumbers)[0]
+    #Uses the lenght to repeat the loop a 'random amount of times'
     while counter<=sentencelength:
+        #Uses the choose successor function to select a possible successor for the sentence, with bigram occurences in mind
         newword = ngram_model.choose_successor(sentence)
         word = newword[-1]     
+        #Appends the word to the list
         sentence.append(word)
+        #Adds one to the counter to eventually stop the loop
         counter+=1
+    #After the loop is done, ends the sentence appending an end symbol  
     sentence.append('</s>') 
     return sentence
 
-     
-    
+      
 
 if __name__=="__main__":
     #1
-    #TODO take our path
-    corpus= CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
+    corpus= CorpusReader("./train")
     sentences = corpus.sents() 
     model1=NgramModel(sentences,2) 
 
     #2
+    #generates a sentence, takes out the start and end symbols, apends a periodt,
+    # joins them into a string and capitalizes them. Prints them with a new line
     sentence1=generate_sentence(model1)
     sentence1=sentence1[1:-1]
     sentence1.append('.')
@@ -62,10 +71,10 @@ if __name__=="__main__":
     sent4_t=word_tokenize(sent4)
     sent5_t=word_tokenize(sent5)
 
-    print(f'The perplexity of sentence:{sent1}, is {model1.perplexity(sent1_t)}.\n'
-        f'The perplexity of sentence:{sent2}, is {model1.perplexity(sent2_t)}.\n'
-        f'The perplexity of sentence:{sent3}, is {model1.perplexity(sent3_t)}.\n'
-        f'The perplexity of sentence:{sent4}, is {model1.perplexity(sent4_t)}.\n'
-        f'The perplexity of sentence:{sent5}, is {model1.perplexity(sent5_t)}.\n')
+    print(f'The perplexity of sentence: {sent1}, is {model1.perplexity(sent1_t)}.\n'
+        f'The perplexity of sentence: {sent2}, is {model1.perplexity(sent2_t)}.\n'
+        f'The perplexity of sentence: {sent3}, is {model1.perplexity(sent3_t)}.\n'
+        f'The perplexity of sentence: {sent4}, is {model1.perplexity(sent4_t)}.\n'
+        f'The perplexity of sentence: {sent5}, is {model1.perplexity(sent5_t)}.\n')
  
 
