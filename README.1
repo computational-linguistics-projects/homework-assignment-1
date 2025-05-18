@@ -17,9 +17,10 @@ But we are aware that the choose_successor function is not accurate without taki
 Generate.py 
 
 
-We could not get this function to work. Conceptually we understood the problem however our code is not looping through and continuing the sentence. 
-Instead it only choosed the immeadiate word after the start symbol. Also, as mentioned before, our choose function is not probability based but random 
-and therefore if our code were to work it is likely to  produce some ugrammatical pairings/sentences. 
+We could not get this function to work. Conceptually we understood the problem, which is in part related to not having been able to include the weights
+in our selecting function, and therefore our generation loop having a hard time reaching a end symbol to end the sentence generation.
+However, we decided to create a non probabilistic version that still has some variability,as it chooses a lenght from one to twenty at random, as we wanted to
+show that we were able to conceptually solve the executable section of the file. 
 
 
 
