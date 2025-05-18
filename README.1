@@ -2,3 +2,25 @@ HOMEWORK 1: Ngram Models
 
 Problems encounterd in our code: 
 
+Model.py 
+ 
+We have a feeling that our perpelexity calculations might not be accurate (lines 127 - 176). If the problem is with our code then it refers back to our calcualtions 
+either in the perpelexity function or our probability function(lines ). But if not it might be the size of the coprus that is skewing the calcuations.
+
+There is also another problem with the choose_successor function (lines 179 - 201) where the code will choose a successor 
+however it does this at random and not based on a any probability calculations. We tried to fix this by using the 'weights' variable 
+in the python method random.choices() and assigning the weight i.e. probability of being chosen at random as the the value of the 
+corresponding bigram key in the n-gram dictionary (see lines 185 -193). However, this did not work and it returned an error 
+saying the the length of the lists did not match. As we did not have anymore time to troubleshoot this, we decided to leave it out. 
+But we are aware that the choose_successor function is not accurate without taking into account the probability of the choice. 
+
+Generate.py 
+
+
+We could not get this function to work. Conceptually we understood the problem however our code is not looping through and continuing the sentence. 
+Instead it only choosed the immeadiate word after the start symbol. Also, as mentioned before, our choose function is not probability based but random 
+and therefore if our code were to work it is likely to  produce some ugrammatical pairings/sentences. 
+
+
+
+

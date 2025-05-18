@@ -57,7 +57,7 @@ if __name__=="__main__":
     string1=(' '.join(sentence1)).capitalize()
     string2=(' '.join(sentence2)).capitalize()
     print(f'{string1}\n{string2}')
-    
+          
     #3
     sent1='Suggestive, Watson, is it not?'
     sent2='It is amazing that a family can be torn apart by something as simple as a pack of wild dogs!'
@@ -77,4 +77,3 @@ if __name__=="__main__":
         f'The perplexity of sentence: {sent4}, is {model1.perplexity(sent4_t)}.\n'
         f'The perplexity of sentence: {sent5}, is {model1.perplexity(sent5_t)}.\n')
  
-
