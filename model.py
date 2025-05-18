@@ -187,15 +187,23 @@ class NgramModel:
         possiblesuccessors=[]
         #loops through the keys in the dictionary
         for key in currentdictionary.keys():
-            #If the bigram prefix is the same as the second last item in the key
-            if successorprefix==key[-2]:
-                #Appends the token that follows it to the possibilities list
-                possiblesuccessors.append(key[-1])
-        #After, it chooses one possibility from the list to complete the bigram
+            #In the case the dictionary is of bigrams
+            if len(key)==2:
+                #If the successor is the same as the initial token of the bigram key 
+                if successorprefix==key[0]:
+                    #Appends the following token to the list
+                    possiblesuccessors.append(key[1])
+            #For longer ngrams
+            else:
+                #If the bigram prefix is the same as the second last item in the key  
+                if successorprefix==key[-2]:
+                    #Appends the token that follows it to the possibilities list
+                    possiblesuccessors.append(key[-1])
+         #After, it chooses one possibility from the list to complete the bigram
         successorchoice=random.choices(possiblesuccessors)
         if successorchoice is not None:
             return successorchoice
         #If the list is empty returns None
         else:
             return None
-        
+               
