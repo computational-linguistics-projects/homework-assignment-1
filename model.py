@@ -186,6 +186,7 @@ class NgramModel:
         #Initiates a list of the possible successors
         possiblesuccessors=[]
         #loops through the keys in the dictionary
+        # successor_weights= []
         for key in currentdictionary.keys():
             #In the case the dictionary is of bigrams
             if len(key)==2:
@@ -194,6 +195,9 @@ class NgramModel:
                     #Appends the following token to the list
                     possiblesuccessors.append(key[1])
             #For longer ngrams
+                    # for succesor in possiblesuccessors: 
+                        #weight= currentdictionary[key] 
+                        #successor_weights.append(weight)
             else:
                 #If the bigram prefix is the same as the second last item in the key  
                 if successorprefix==key[-2]:
@@ -201,7 +205,7 @@ class NgramModel:
                     possiblesuccessors.append(key[-1])
         try:
          #After, it chooses one possibility from the list to complete the bigram
-            successorchoice=random.choices(possiblesuccessors)
+            successorchoice=random.choices(possiblesuccessors) # ,weights=successor_weights) 
             return successorchoice
         except:
             return None ('Please run again.')
