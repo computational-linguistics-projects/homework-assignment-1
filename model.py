@@ -199,11 +199,11 @@ class NgramModel:
                 if successorprefix==key[-2]:
                     #Appends the token that follows it to the possibilities list
                     possiblesuccessors.append(key[-1])
+        try:
          #After, it chooses one possibility from the list to complete the bigram
-        successorchoice=random.choices(possiblesuccessors)
-        if successorchoice is not None:
+            successorchoice=random.choices(possiblesuccessors)
             return successorchoice
-        #If the list is empty returns None
-        else:
-            return None
+        except:
+            return None ('Please run again.')
+
                

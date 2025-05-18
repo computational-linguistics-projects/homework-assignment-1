@@ -8,18 +8,27 @@ from corpusreader import CorpusReader
 from model import NgramModel
 import re
 from nltk import word_tokenize
+import random
 
-def generate_sentence(ngram_model=NgramModel):
-    sentence = []
-    newword = ngram_model.choose_successor(sentence)
-    word = newword[0]
-    while re.search('</s>', word)==False:
-        for _ in range (1,50):    
-            sentence.append(word)
-    else:
-        sentence.append('</s>')
-        return sentence
-       
+def generate_sentence(ngram_model):
+    """This function takes a Ngrammodel created by the class NgramModels and creates sentences
+    based on its class function choose_successor. It therefore takes the corpus associated with
+    the instantiated model into account."""
+    #Initiates a sentence with a start symbol 
+    sentence = ['<s>']
+    #While the follo
+    counter=0
+    listofnumbers=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    sentencelength=random.choices(listofnumbers)[0]
+    while counter<=sentencelength:
+        newword = ngram_model.choose_successor(sentence)
+        word = newword[-1]     
+        sentence.append(word)
+        counter+=1
+    sentence.append('</s>') 
+    return sentence
+
+     
     
 
 if __name__=="__main__":
@@ -27,34 +36,35 @@ if __name__=="__main__":
     corpus= CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
     sentences = corpus.sents() 
     model1=NgramModel(sentences,2) 
-    print(generate_sentence(model1))
+
     #2
-    # space=' '
-    # sentence1=generate_sentence(model1)
-    # sentence1=sentence1[1:-1]
-    # sentence1.append('.')
-    # sentence2=generate_sentence(model1)
-    # sentence2=sentence2[1:-1]
-    # sentence2.append('.')
-    # (space.join(sentence1)).capitalize()
-    # (space.join(sentence2)).capitalize()
-    # print(sentence1,'\n',sentence2)
-    # #3
-    # sent1='Suggestive, Watson, is it not?'
-    # sent2='It is amazing that a family can be torn apart by something as simple as a pack of wild dogs!'
-    # sent3='So spoke Sherlock Holmes and turned back to the great scrapbook in which he was arranging and indexing some of his recent material.'
-    # sent4='What I like best about my friends is that they are few.'
-    # sent5='Friends what is like are they about I best few my that.'
+    sentence1=generate_sentence(model1)
+    sentence1=sentence1[1:-1]
+    sentence1.append('.')
+    sentence2=generate_sentence(model1)
+    sentence2=sentence2[1:-1]
+    sentence2.append('.')
+    string1=(' '.join(sentence1)).capitalize()
+    string2=(' '.join(sentence2)).capitalize()
+    print(f'{string1}\n{string2}')
+    
+    #3
+    sent1='Suggestive, Watson, is it not?'
+    sent2='It is amazing that a family can be torn apart by something as simple as a pack of wild dogs!'
+    sent3='So spoke Sherlock Holmes and turned back to the great scrapbook in which he was arranging and indexing some of his recent material.'
+    sent4='What I like best about my friends is that they are few.'
+    sent5='Friends what is like are they about I best few my that.'
 
-    # sent1_t=word_tokenize(sent1)
-    # sent2_t=word_tokenize(sent2)
-    # sent3_t=word_tokenize(sent3)
-    # sent4_t=word_tokenize(sent4)
-    # sent5_t=word_tokenize(sent5)
+    sent1_t=word_tokenize(sent1)
+    sent2_t=word_tokenize(sent2)
+    sent3_t=word_tokenize(sent3)
+    sent4_t=word_tokenize(sent4)
+    sent5_t=word_tokenize(sent5)
 
-    # print(f'The perplexity of sentence:{sent1}, is {model1.perplexity(sent1_t)}.\n'
-    #     f'The perplexity of sentence:{sent2}, is {model1.perplexity(sent2_t)}.\n'
-    #     f'The perplexity of sentence:{sent3}, is {model1.perplexity(sent3_t)}.\n'
-    #     f'The perplexity of sentence:{sent4}, is {model1.perplexity(sent4_t)}.\n'
-    #     f'The perplexity of sentence:{sent5}, is {model1.perplexity(sent5_t)}.\n')
+    print(f'The perplexity of sentence:{sent1}, is {model1.perplexity(sent1_t)}.\n'
+        f'The perplexity of sentence:{sent2}, is {model1.perplexity(sent2_t)}.\n'
+        f'The perplexity of sentence:{sent3}, is {model1.perplexity(sent3_t)}.\n'
+        f'The perplexity of sentence:{sent4}, is {model1.perplexity(sent4_t)}.\n'
+        f'The perplexity of sentence:{sent5}, is {model1.perplexity(sent5_t)}.\n')
  
+
