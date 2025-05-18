@@ -21,18 +21,18 @@ def generate_sentence(ngram_model=NgramModel):
 
 
         
-        if re.search('</s>', word):
-            sentence.append('</s>')
-            return sentence
-        else:
-            for _ in range (1,50):       
-                sentence.append(word)
+        # if re.search('</s>', word):
+        #     sentence.append('</s>')
+        #     return sentence
+        # else:
+        #     for _ in range (1,50):       
+        #         sentence.append(word)
        
     
 
 
 #__name__=="__main__"
-testcorpus= CorpusReader("C:/Users/maril/Downloads/train/train")
+testcorpus= CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
 sentences = testcorpus.sents()  # a list of lists of tokens
 test=NgramModel(sentences,2) 
 print(generate_sentence(test))

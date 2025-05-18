@@ -39,5 +39,5 @@ class CorpusReader:
                         #Returns the final list
                         return listoftokens
         #Handles errors
-        except:
-            raise ('Error. Confirm if the path name is correctly spelled, or if file exists.')            
+        except FileNotFoundError:
+            raise ('Error. Confirm if the path name is correctly spelled,the slashes are in the correct direction, or if file exists.')            
