@@ -171,7 +171,7 @@ class NgramModel:
                  
             #Starts to calculate perplexity by multiplying the token's probability one by one
         #After the probabilities have been multiplied, finishes the perplexity calculation by raising it to the power of -1/counter
-        #also remves the one from the count of n bc we have begginign and end markers
+        #also removes the one from the count of n bc we have begginign and end markers
         
             return perplexity
 
@@ -182,10 +182,15 @@ class NgramModel:
         successorprefix=tuple(successorprefix)
         currentdictionary=self.frequency
         possiblesuccessors=[]
+        # successor_weights= []
         for key in currentdictionary.keys():
             if successorprefix==key[:-1]:
                 possiblesuccessors.append(key[-1])
-        successorchoice=random.choices(possiblesuccessors)    
+        #     for succesor in possiblesuccessors: 
+        #         weight= currentdictionary[key] 
+        #         successor_weights.append(weight)
+
+        successorchoice=random.choices(possiblesuccessors)# ,weights=successor_weights)    
         if successorchoice is not None:
             return successorchoice
         else:
@@ -211,7 +216,7 @@ class NgramModel:
        
        
        
-testcorpus= CorpusReader("C:/Users/ritav/OneDrive - Universiteit Utrecht/A computational linguistics/train")
+testcorpus= CorpusReader("C:/Users/maril/Downloads/train/train")
 sentences = testcorpus.sents()  # a list of lists of tokens
 test=NgramModel(sentences,2)    
 print(test.probability(('the','ball')))
@@ -226,6 +231,6 @@ print(test.perplexity(['ccccc','ball']))
 
 #print(test.unigram())
 
-print(test.choose_successor(['the','ball','and']))
+print(test.choose_successor(['and']))
 
 # %%
